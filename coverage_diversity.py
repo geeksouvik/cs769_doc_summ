@@ -31,14 +31,38 @@ def calculate_diversity(S, V, P, idx_to_token):
 
     return total_diversity
 
-def compute_summary_quality(S, V, new_sent, P, idx_to_token, lambda_val):
+def calculate_relevance(sentence_vector, idf, tokenAtIndex):
+    relevance = 0
+    for key in sentence_vector:
+        word = tokenAtIndex[key]
+        relevance += sentence_vector[key] * idf[word]
+    return relevance
+
+def compute_summary_quality(S, V, new_sent, P, idx_to_token, lambda_val, beta_val):
     S_copy = S.copy()
 
     if new_sent is not None:
         S_copy.append(new_sent)
 
+    if len(S_copy) == 0:
+        relevance_score = 0
+    else:
+        relevance_score = sum([calculate_relevance(s, inverse_df, idx_to_token) for s in S_copy]) / len(S_copy)
+
+
     return (calculate_coverage(S_copy, V, idx_to_token) + 
-            lambda_val * calculate_diversity(S_copy, V, P, idx_to_token))
+            lambda_val * calculate_diversity(S_copy, V, P, idx_to_token) +
+            beta_val * relevance_score)
+
+
+# def compute_summary_quality(S, V, new_sent, P, idx_to_token, lambda_val):
+#     S_copy = S.copy()
+
+#     if new_sent is not None:
+#         S_copy.append(new_sent)
+
+#     return (calculate_coverage(S_copy, V, idx_to_token) + 
+#             lambda_val * calculate_diversity(S_copy, V, P, idx_to_token))
 
 def init(idf_file):
     global inverse_df

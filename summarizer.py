@@ -98,9 +98,9 @@ while count_of_bytes_in_summary + shortest_sent_size <= summary_size_in_bytes an
 		all_sentence_vecs_without_v.remove( v )
 
 		f_av = cdf.compute_summary_quality( summary_vecs, seed_sentences_vecs, v, \
-																			clusters, km.tokenAtIndex, lambda_val = 1 )
+																			clusters, km.tokenAtIndex, lambda_val = 1,beta_val = 1 )
 		f_a = cdf.compute_summary_quality( summary_vecs, seed_sentences_vecs, None, 
-																			clusters, km.tokenAtIndex, lambda_val = 1 )
+																			clusters, km.tokenAtIndex, lambda_val = 1,beta_val = 1 )
 		all_sentence_vecs_without_v.append( v )
 
 		if (f_av - f_a >= 0 or max_profit_till_now == -1) \
